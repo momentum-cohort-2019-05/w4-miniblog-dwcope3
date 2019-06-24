@@ -1,23 +1,31 @@
 from django.shortcuts import render
 
-# Create your views here.
-
 from django.views import generic
 from .models import Blog, BlogAuthor, BlogComment
-from django.contrib.auth.models import User #Blog author or commenter
+from django.contrib.auth.models import User 
+
+#Blog author or commenter
 
 
 def index(request):
     """
     View function for home page of site.
     """
-    # Render the HTML template index.html
-    return render(
-        request,
-        'index.html',
-    )
-    
+    #Generate counts of some of the main objects
 
+    num_blogs = Blog.objects.all().count()
+    num_blog_authors = BlogAuthor.objects.all().count()
+    num_blog_comments = BlogComment.objects.all().count()
+
+    context = {
+        'num_blogs': num_blogs,
+        'num_blog_authors': num_blog_authors,
+        'num_blog_comments': num_blog_comments,
+    }
+
+    # Render the HTML template index.html
+    return render(request,'index.html', context=context)
+    
 
 class BlogListView(generic.ListView):
     """
